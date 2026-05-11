@@ -6,16 +6,46 @@ defmodule AstroBot.Commands do
     Nostrum.Api.create_message(msg.channel_id, "Pong! Bot online e funcionando!")
   end
 
-  # Um parâmetro - !cachorro
-  def handle("cachorro", _args, msg) do
-    case HTTPoison.get("https://dog.ceo/api/breeds/image/random") do
-      {:ok, %{status_code: 200, body: body}} ->
-        data = Jason.decode!(body)
-        url = data["message"]
-        Nostrum.Api.create_message(msg.channel_id, url)
+  # Um parâmetro - !pokemon <nome>
+  def handle("pokemon", args, msg) do
+    nome = args |> Enum.join("") |> String.downcase()
 
-      _ ->
-        Nostrum.Api.create_message(msg.channel_id, "Erro ao buscar foto de cachorro.")
+    if nome == "" do
+      Nostrum.Api.create_message(msg.channel_id, "Uso: !pokemon <nome>")
+    else
+      case HTTPoison.get("https://pokeapi.co/api/v2/pokemon/#{nome}") do
+        {:ok, %{status_code: 200, body: body}} ->
+          data = Jason.decode!(body)
+
+          tipos =
+            data["types"]
+            |> Enum.map(fn t -> t["type"]["name"] end)
+            |> Enum.join(", ")
+
+          habilidades =
+            data["abilities"]
+            |> Enum.map(fn a -> a["ability"]["name"] end)
+            |> Enum.join(", ")
+
+          altura = data["height"] / 10
+          peso = data["weight"] / 10
+
+          resposta = """
+          **#{String.upcase(data["name"])}** (##{data["id"]})
+          Tipo: #{tipos}
+          Altura: #{altura}m
+          Peso: #{peso}kg
+          Habilidades: #{habilidades}
+          """
+
+          Nostrum.Api.create_message(msg.channel_id, resposta)
+
+        {:ok, %{status_code: 404}} ->
+          Nostrum.Api.create_message(msg.channel_id, "Pokemon nao encontrado. Verifique o nome!")
+
+        _ ->
+          Nostrum.Api.create_message(msg.channel_id, "Erro ao buscar o Pokemon.")
+      end
     end
   end
 
