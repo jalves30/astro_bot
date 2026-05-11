@@ -93,7 +93,7 @@ Quando aparecer `[info] READY` no terminal, o bot esta online e pronto para rece
 | Comando | Tipo | Descricao |
 |---------|------|-----------|
 | `!ping` | Sem parametro | Verifica se o bot esta online |
-| `!cachorro` | Sem parametro | Envia uma foto aleatoria de cachorro |
+| `!pokemon <nome>` | Um parametro | Busca informacoes sobre um Pokemon |
 | `!anime <nome>` | Um parametro | Busca informacoes sobre um anime |
 | `!traducao <idioma> <texto>` | Dois parametros | Traduz texto do portugues para outro idioma |
 | `!conv <valor> <origem> <destino>` | Dois parametros | Converte valores entre moedas |
@@ -112,10 +112,14 @@ Quando aparecer `[info] READY` no terminal, o bot esta online e pronto para rece
 > Pong! Bot online e funcionando!
 ```
 
-### !cachorro
+### !pokemon
 ```
-!cachorro
-> [foto de um cachorro]
+!pokemon pikachu
+> **PIKACHU** (#25)
+> Tipo: electric
+> Altura: 0.4m
+> Peso: 6.0kg
+> Habilidades: static, lightning-rod
 ```
 
 ### !anime
@@ -224,7 +228,7 @@ lib/
 
 | Comando | API | Documentacao |
 |---------|-----|-------------|
-| `!cachorro` | Dog CEO API | dog.ceo/dog-api |
+| `!pokemon` | PokeAPI | pokeapi.co |
 | `!anime` | Jikan API | jikan.moe |
 | `!traducao` | MyMemory API | mymemory.translated.net |
 | `!conv` | ExchangeRate API | open.er-api.com |
